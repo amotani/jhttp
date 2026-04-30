@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_amotani_jhttp_1777588095223-pr-trigger-input-set
+  identifier: Build_amotani_jhttp_1777588095223prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_amotani_jhttp_1777588095223
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
