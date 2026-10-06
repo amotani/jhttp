@@ -53,3 +53,52 @@ pipeline:
             type: Cloud
             spec: {}
         type: CI
+    - stage:
+        name: deploy
+        identifier: deploy
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: jhttp
+          environment:
+            environmentRef: local
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: dockerdesktop
+          execution:
+            steps:
+              - step:
+                  type: K8sCanaryDeploy
+                  name: Canary Deployment
+                  identifier: Canary_Deployment
+                  spec:
+                    skipDryRun: false
+                    instanceSelection:
+                      type: Count
+                      spec:
+                        count: 1
+                  timeout: 10m
+              - step:
+                  type: K8sCanaryDelete
+                  name: Canary Delete
+                  identifier: Canary_Delete
+                  spec: {}
+                  timeout: 10m
+              - step:
+                  type: K8sRollingDeploy
+                  name: Rolling Deployment
+                  identifier: Rolling_Deployment
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
