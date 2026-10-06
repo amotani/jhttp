@@ -24,7 +24,7 @@ pipeline:
                   name: Build and Test
                   spec:
                     connectorRef: dockerhubamotani
-                    image: maven:3.8-jdk-8
+                    image: maven:3.9-eclipse-temurin-8
                     shell: Sh
                     command: mvn -B package --file pom.xml
                     reports:
@@ -47,9 +47,9 @@ pipeline:
                   timeout: ""
                   type: BuildAndPushDockerRegistry
           platform:
-            arch: Amd64
             os: Linux
+            arch: Arm64
           runtime:
-            spec: {}
             type: Cloud
+            spec: {}
         type: CI
