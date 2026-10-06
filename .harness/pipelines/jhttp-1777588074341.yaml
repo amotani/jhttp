@@ -21,20 +21,29 @@ pipeline:
             steps:
               - step:
                   identifier: echo
-                  name: echo
+                  name: Build and Test
                   spec:
-                    command: echo hello world
+                    connectorRef: dockerhubamotani
+                    image: maven:3.8-jdk-8
+                    shell: Sh
+                    command: mvn -B package --file pom.xml
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - target/surefire-reports/*.xml
                   timeout: ""
                   type: Run
               - step:
                   identifier: dockerbuild
                   name: docker_build
                   spec:
-                    caching: true
-                    connectorRef: <+input>
-                    repo: hello/world
+                    connectorRef: dockerhubamotani
+                    repo: amotani/jhttp
                     tags:
                       - latest
+                      - <+pipeline.sequenceId>
+                    caching: true
                   timeout: ""
                   type: BuildAndPushDockerRegistry
           platform:
