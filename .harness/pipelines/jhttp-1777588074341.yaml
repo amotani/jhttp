@@ -20,20 +20,11 @@ pipeline:
           execution:
             steps:
               - step:
-                  identifier: echo
                   name: Build and Test
-                  spec:
-                    connectorRef: dockerhubamotani
-                    image: maven:3.9-eclipse-temurin-8
-                    shell: Sh
-                    command: mvn -B package --file pom.xml
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths:
-                          - target/surefire-reports/*.xml
-                  timeout: ""
-                  type: Run
+                  identifier: echo
+                  template:
+                    templateRef: mavenbuildandtest
+                    versionLabel: v1
               - step:
                   identifier: dockerbuild
                   name: docker_build
